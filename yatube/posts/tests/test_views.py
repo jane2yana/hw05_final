@@ -204,6 +204,7 @@ class PaginatorViewsTest(TestCase):
         self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(PaginatorViewsTest.user)
+        self.cache = cache.clear()
 
     @print_func_info
     def test_first_page_contains_ten_records(self):
