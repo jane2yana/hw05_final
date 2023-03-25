@@ -162,7 +162,7 @@ class PostsPagesTests(TestCase):
 
     @print_func_info
     def test_follow_page(self):
-        """Тест правильной работы подписок."""
+        """Тест правильной работы подписки."""
         response = self.authorized_client2.get(reverse('posts:follow_index'))
         self.assertEqual(len(response.context['page_obj']), 0)
 
@@ -174,6 +174,13 @@ class PostsPagesTests(TestCase):
         response = self.authorized_client.get(reverse('posts:follow_index'))
         self.assertNotIn(self.post, response.context['page_obj'])
 
+    @print_func_info
+    def test_unfollow_page(self):
+        """Проверка отписок."""
+        Follow.objects.get_or_create(user=self.user2, author=self.post.author)
+        response = self.authorized_client2.get(reverse('posts:follow_index'))
+        self.assertEqual(len(response.context['page_obj']), 1)
+        
         Follow.objects.all().delete()
         response = self.authorized_client2.get(reverse("posts:follow_index"))
         self.assertEqual(len(response.context["page_obj"]), 0)
