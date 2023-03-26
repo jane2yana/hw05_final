@@ -180,7 +180,7 @@ class PostsPagesTests(TestCase):
         Follow.objects.get_or_create(user=self.user2, author=self.post.author)
         response = self.authorized_client2.get(reverse('posts:follow_index'))
         self.assertEqual(len(response.context['page_obj']), 1)
-        
+
         Follow.objects.all().delete()
         response = self.authorized_client2.get(reverse("posts:follow_index"))
         self.assertEqual(len(response.context["page_obj"]), 0)
