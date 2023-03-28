@@ -1,0 +1,38 @@
+{% load thumbnail %}
+{% load static %}
+
+
+    <div class="card">
+      <div class="card-header">
+        {% thumbnail post.image "900x339" crop="top" upscale=True as im %}
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="rover" />
+        {% endthumbnail %}
+      </div>
+      <div class="card-body">
+        {% if post.group %}
+        <a href="{% url 'posts:group_list' post.group.slug %}"><span class="tag tag-tagle">{{ post.group.title }}</span></a>
+        {%endif%}
+        {%if post.title %}
+        <h4>{{ post.title }}</h4>
+        {% else %}
+        <h4>
+            {{ post.text|truncatechars:30 }}..
+        </h4>
+        {% endif %}
+        {% if post.text|length < 295 %}
+        <p>
+          {{ post.text|linebreaksbr }}
+        </p>
+        {% else %}
+        <p>
+            {{ post.text|linebreaksbr|truncatechars:295 }}...<a href="{% url 'posts:post_detail' post.id %}">читать далее</a>
+        </p>
+        {% endif %}
+        <div class="user">
+          <div class="user-info">
+            <a href="{% url 'posts:profile' post.author %}"><h5>@{{ post.author }}</h5></a>
+            <small>{{ post.pub_date| date:"d E Y" }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
