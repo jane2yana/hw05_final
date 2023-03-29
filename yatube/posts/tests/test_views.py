@@ -28,7 +28,8 @@ class PostsPagesTests(TestCase):
         cls.post = Post.objects.create(
             author=cls.user,
             text=('Тестовый пост' * 15),
-            group=cls.group
+            group=cls.group,
+            title=('Тестовый заголовок')
         )
 
         cls.urls_names_templates = (
@@ -105,6 +106,7 @@ class PostsPagesTests(TestCase):
         """Страница create получает правильный контекст."""
         response = self.authorized_client.get(reverse('posts:post_create'))
         form_fields = {
+            'title': forms.fields.CharField,
             'text': forms.fields.CharField,
             'group': forms.models.ModelChoiceField,
         }
@@ -120,6 +122,7 @@ class PostsPagesTests(TestCase):
             reverse('posts:post_edit', kwargs={'post_id': self.post.id})
         )
         form_fields = {
+            'title': forms.fields.CharField,
             'text': forms.fields.CharField,
             'group': forms.models.ModelChoiceField,
         }

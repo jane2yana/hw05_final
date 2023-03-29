@@ -9,7 +9,9 @@
         <h1> Последние обновления на сайте </h1>
         {% include 'includes/switcher.html' %}
         {% for post in page_obj %}
+        <div class="container">
         {% include 'includes/postcard.html'%}
+        </div>
         {% endfor %}
         {% include 'includes/paginator.html' %}
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load user_filters %}
 
 {% block title %}
   {% if is_edit %} Добавление поста
@@ -7,20 +8,16 @@
 {% endblock %}
 
 {% block content %}
-        <div class="row justify-content-center">
-          <div class="col-md-8 p-5">
-            <div class="card">
-              <div class="card-header">       
-                {% if is_edit %} Редактирование поста
+            <div class="card" style="width: 70vh; margin-left: 35vh;">
+              <div class="card-header" style="margin-left: 0; margin-top: 0%; background-color: #70cee6;">       
+                <h5>{% if is_edit %} Редактирование поста
                 {% else %} Новый пост
-                {% endif %}             
+                {% endif %}  
+                </h5>
               </div>
-              <div class="card-body">        
-                <form method="post" enctype="multipart/form-data">
-                  {% csrf_token %}
-                  {{ form.as_p }}
-                  {% if is_edit %} <input type="submit" value="Сохранить">
-                  {% else %} <input type="submit" value="Добавить">
-                  {% endif %}
-                </form>
-{% endblock %}
+              <div class="card-body">
+              {% include 'includes/formerrors.html'%}
+              {% include 'includes/formfields.html'%}
+                        </div> <!-- card body -->
+                      </div> <!-- card -->
+                {% endblock %}

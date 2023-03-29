@@ -1,14 +1,19 @@
 {% for comment in comments %}
-  <div class="media mb-4">
+<div class="comment-post" style="margin-top: 2%;">
+  <div class="media">
     <div class="media-body">
-      <h5 class="mt-0">
+      <h5>
         <a href="{% url 'posts:profile' comment.author.username %}">
-          {{ comment.author.username }}
+          @{{ comment.author.username }}
         </a>
       </h5>
+      <small style="margin-left: 2%; margin-top: -3px;">{{comment.created|date:"d E Y"}}</small>
       <p>
         {{ comment.text|linebreaksbr }}
       </p>
     </div>
   </div>
-{% endfor %} 
+</div>
+{% endfor %}
+</div>
+</div>

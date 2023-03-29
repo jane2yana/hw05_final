@@ -1,22 +1,8 @@
+{% with request.resolver_match.view_name as view_name %}
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
 <!-- Navigation -->
 <div class="fixed-top">
-  <header class="topbar">
-      <div class="container">
-        <div class="row">
-          <!-- social icon-->
-          <div class="col-sm-12">
-            <ul class="social-network">
-              <li><a class="waves-effect waves-dark" href="#"><i class="fa fa-facebook"></i></a></li>
-              <li><a class="waves-effect waves-dark" href="#"><i class="fa fa-twitter"></i></a></li>
-              <li><a class="waves-effect waves-dark" href="#"><i class="fa fa-linkedin"></i></a></li>
-              <li><a class="waves-effect waves-dark" href="#"><i class="fa fa-pinterest"></i></a></li>
-              <li><a class="waves-effect waves-dark" href="#"><i class="fa fa-google-plus"></i></a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-  </header>
   <nav class="navbar navbar-expand-lg navbar-dark mx-background-top-linear">
     <div class="container">
       <a class="navbar-brand" href="{% url 'posts:index' %}" style="text-transform: uppercase; font-size: 1.6em; "><span style="color:red; font-weight: bold;">Ya</span>tube</a>
@@ -24,40 +10,32 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
-
         <ul class="navbar-nav ml-auto">
-
-          <li class="nav-item active">
-            <a class="nav-link" href="https://nusasatu.com">Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-
-         <li class="nav-item">
-            <a class="nav-link" href="#">Fruits</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="#">Sea food</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="#">Vegetables</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="#">Blog</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item"> 
+          <a class="nav-link" href="{% url 'posts:post_create' %}">Новая запись</a>
+        </li>
+        <li class="nav-item"> 
+          <a class="nav-link" href="{% url 'users:password_reset_form' %}">Изменить пароль</a>
+        </li>
+        <li class="nav-item"> 
+          <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
+        </li>
+        <li class="nav-item"> 
+          <a class="nav-link" href="{% url 'posts:profile' user %}">|  Пользователь: <span style="font-weight: bold;">{{ user }}</span></a>
+        </li>
+         {% else %}
+         <li class="nav-item"> 
+          <a class="nav-link" href="{% url 'users:login' %}">Войти</a>
+        </li>
+        <li class="nav-item"> 
+          <a class="nav-link" href="{% url 'users:signup' %}">Регистрация</a>
+        </li>
+        {% endif %}
         </ul>
       </div>
     </div>
   </nav>
 </div>
+
+{%endwith%}

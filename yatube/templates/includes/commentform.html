@@ -1,0 +1,14 @@
+{% load user_filters %}
+
+{% if user.is_authenticated %}
+  <div class="card" style="width: 80vh; margin-left: 25vh;">
+    <p class="card-header">Добавить комментарий:</p>
+    <div class="card-body">
+      <form method="post" action="{% url 'posts:add_comment' post.id %}">
+        {% csrf_token %}      
+        <div class="form-group">
+          {{ form.text|addclass:'form-control' }}
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-left: 3%;">Отправить</button>
+      </form>
+{% endif %}

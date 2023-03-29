@@ -3,12 +3,21 @@
 
 
     <div class="card">
+      {% if post.image %}
       <div class="card-header">
         {% thumbnail post.image "900x339" crop="top" upscale=True as im %}
         <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="rover" />
         {% endthumbnail %}
       </div>
+      {% endif %}
       <div class="card-body">
+        {% if post.author == request.user %}
+        <div class="pen">
+        <a href="{% url 'posts:post_edit' post.id %}">
+          <img src="{% static 'img/png/pen2.png' %}" width="20" height="20">
+        </a>
+        </div>
+        {% endif %}
         {% if post.group %}
         <a href="{% url 'posts:group_list' post.group.slug %}"><span class="tag tag-tagle">{{ post.group.title }}</span></a>
         {%endif%}
@@ -16,7 +25,7 @@
         <h4>{{ post.title }}</h4>
         {% else %}
         <h4>
-            {{ post.text|truncatechars:30 }}..
+            {{ post.text|truncatechars:30 }}
         </h4>
         {% endif %}
         {% if post.text|length < 295 %}
@@ -33,6 +42,11 @@
             <a href="{% url 'posts:profile' post.author %}"><h5>@{{ post.author }}</h5></a>
             <small>{{ post.pub_date| date:"d E Y" }}</small>
           </div>
+        </div>
+        <div class="comment">
+        <a href="{% url 'posts:post_detail' post.id %}">
+          <img src="{% static 'img/png/comment.ico' %}" width="20" height="20" style="color: #00000"> {{post.comments.count}}
+        </a>
         </div>
       </div>
     </div>
