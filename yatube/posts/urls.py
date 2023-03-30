@@ -27,4 +27,9 @@ urlpatterns = [
         views.profile_unfollow,
         name='profile_unfollow'
     ),
+    path(
+        'delete/<int:comment_id>/',
+        views.comment_delete,
+        name='comment_del'
+    )
 ]

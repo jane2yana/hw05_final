@@ -31,7 +31,8 @@ class Group(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=50,
+    title = models.CharField(
+        max_length=50,
         blank=True,
         null=True,
         verbose_name='Заголовок поста',

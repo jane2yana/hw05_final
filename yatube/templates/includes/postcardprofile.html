@@ -1,0 +1,59 @@
+{% load thumbnail %}
+{% load static %}
+{% with request.resolver_match.view_name as view_name %}
+
+    <div class="card" style="width: 70%; margin-left: 30%;">
+      {% if post.image %}
+      <div class="card-header">
+        {% thumbnail post.image "900x339" crop="top" upscale=True as im %}
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="rover" />
+        {% endthumbnail %}
+      </div>
+      {% endif %}
+      <div class="card-body" style="margin: 2%;">
+        {% if post.author == request.user %}
+        <div class="pen">
+          <a href="{% url 'posts:post_edit' post.id %}">
+            <img src="{% static 'img/png/pen2.png' %}" width="20" height="20">
+          </a>
+        </div>
+        {% endif %}
+        {% if post.group %}
+        <a href="{% url 'posts:group_list' post.group.slug %}">
+          <span class="tag tag-tagle">{{ post.group.title }}</span>
+        </a>
+        {%endif%}
+        {%if post.title %}
+        <h4>{{ post.title }}</h4>
+        {% else %}
+        <h4>
+            {{ post.text|truncatechars:30 }}
+        </h4>
+        {% endif %}
+        {% if view_name == 'posts:post_detail' or post.text|length < 295 %}
+          <p>
+            {{ post.text|linebreaksbr }}
+          </p>
+        {% else %}
+          <p>
+            {{ post.text|linebreaksbr|truncatechars:295 }}
+            <a href="{% url 'posts:post_detail' post.id %}">читать далее</a>
+          </p>
+        {% endif %}
+          <div class="user">
+            <div class="user-info">
+              <a href="{% url 'posts:profile' post.author %}">
+                <h5>@{{ post.author }}</h5>
+              </a>
+              <small>{{ post.pub_date| date:"d E Y" }}</small>
+            </div>
+          </div>
+          <div class="comment">
+            <a href="{% url 'posts:post_detail' post.id %}">
+              <img src="{% static 'img/png/comment.ico' %}" width="20" height="20" style="color: #00000">
+              {{post.comments.count}}
+            </a>
+          </div>
+        </div>
+    </div>
+{% endwith %}

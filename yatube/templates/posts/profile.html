@@ -5,26 +5,49 @@
 
 {% block content %}
 
-            <h1>Все посты пользователя {{ author }} </h1>
-            <div>
-            <h5 class="profile" style="margin-top: 1%;"> Всего постов: {{ page_obj.paginator.count }} </h5>
+<h1>Профиль пользователя {{ author }} </h1>
+  <div class="card col-3" style="width: 20%; float: left; height: auto;">
+    <div class="card-header" style="text-align: center; margin: 0;">
+      <h5>{{ author.get_full_name }}</h5>
+    </div>
+    <div class="card-body" style="margin-left: -5vh;">
+      <div>
+      <ul>
+        <li style="border-bottom: 1px solid #b3b3b3;">
+          Всего постов: {{ page_obj.paginator.count }}
+        </li>
+        <li style="border-bottom: 1px solid #b3b3b3;">
+          Подписчики: {{ author.following.count }}
+        </li>
+        <li style="border-bottom: 1px solid #b3b3b3;">
+          Подписки: {{ author.follower.count }}
+        </li>
+        <li style="border-bottom: 1px solid #b3b3b3;">
+          Комментарии: {{ author.comments.count }}
+        </li>
+        <li style="border-bottom: 1px solid #b3b3b3; margin-bottom: 2%;">
+          Дата регистрации: <p>{{ author.date_joined| date:"d E Y"  }}</p>
+        </li>
+        <li style="margin-top: 20px;">
         {% if following %}
-        <a class="btn btn-lg btn-light"
-          href="{% url 'posts:profile_unfollow' username %}" role="button"
-          >
+        <a class="btn btn-lg btn-secondary"
+          href="{% url 'posts:profile_unfollow' author %}" role="button">
           Отписаться
         </a>
         {% else %}
         <a
-          class="btn btn-lg btn-primary"
-          href="{% url 'posts:profile_follow' username %}" role="button"
-          >
+          class="btn btn-lg btn-info"
+          href="{% url 'posts:profile_follow' author %}" role="button">
           Подписаться
         </a>
         {% endif %}
-      </div>
+        </li>
+      </ul>
+    </div>
+    </div>
+  </div>
         {% for post in page_obj %}
-        {% include 'includes/postcard.html'%}
+        {% include 'includes/postcardprofile.html'%}
         {% endfor %}
         {% include 'includes/paginator.html' %}
 {% endblock %}

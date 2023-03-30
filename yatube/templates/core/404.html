@@ -1,8 +1,25 @@
-{% extends "base.html" %}
-
-{% block title %}Custom 404{% endblock %}
-{% block content %}
-  <h1>Custom 404</h1>
-  <p>Страницы с адресом {{ path }} не существует</p>
-  <a href="{% url 'posts:index' %}"> Идите на главную</a>
-{% endblock %}
+<section class="page_404">
+	<div class="container">
+		<div class="row">	
+		<div class="col-sm-12 ">
+		<div class="col-sm-10 col-sm-offset-1  text-center">
+		<div class="four_zero_four_bg">
+			<h1 class="text-center ">404</h1>
+		
+		
+		</div>
+		
+		<div class="contant_box_404">
+		<h3 class="h2">
+		Кажется, вы потерялись
+		</h3>
+		
+		<p>страница, которую вы открыли, не доступна!</p>
+		
+		<a href="posts:index" class="link_404">Вернуться на главную</a>
+	</div>
+		</div>
+		</div>
+		</div>
+	</div>
+</section>

@@ -9,7 +9,12 @@ from .utils import paginate_page
 
 @cache_page(20, key_prefix='index_page')
 def index(request):
-    page_obj = paginate_page(request, Post.objects.all())
+    page_obj = paginate_page(
+        request,
+        Post.objects
+        .select_related('group', 'author',)
+        .prefetch_related('comments')
+    )
     context = {
         'page_obj': page_obj,
     }
@@ -18,7 +23,12 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    page_obj = paginate_page(request, group.posts.all())
+    page_obj = paginate_page(
+        request,
+        group.posts
+        .select_related('group', 'author')
+        .prefetch_related('comments')
+    )
     context = {
         'group': group,
         'page_obj': page_obj,
@@ -28,7 +38,7 @@ def group_posts(request, slug):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    posts = author.posts.all()
+    posts = author.posts.select_related('group').prefetch_related('comments')
     page_obj = paginate_page(request, posts)
     if request.user.is_authenticated:
         following = author.following.exists()
@@ -36,9 +46,8 @@ def profile(request, username):
         following = None
     context = {
         'page_obj': page_obj,
-        'author': author.get_full_name,
-        'username': author,
-        'following': following
+        'author': author,
+        'following': following,
     }
     return render(request, 'posts/profile.html', context)
 
@@ -63,13 +72,11 @@ def post_create(request):
         request.POST or None,
         files=request.FILES or None
     )
-
     if form.is_valid():
         post = form.save(commit=False)
         post.author = request.user
         post.save()
         return redirect('posts:profile', post.author)
-
     context = {
         'form': form,
         'is_edit': None,
@@ -80,10 +87,8 @@ def post_create(request):
 @login_required
 def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-
     if post.author != request.user:
         return redirect('posts:post_detail', post_id=post_id)
-
     form = PostForm(
         request.POST or None,
         files=request.FILES or None,
@@ -93,7 +98,6 @@ def post_edit(request, post_id):
         post = form.save(commit=False)
         post.save()
         return redirect('posts:post_detail', post_id=post_id)
-
     context = {
         'form': form,
         'is_edit': True,
@@ -115,7 +119,12 @@ def add_comment(request, post_id):
 
 @login_required
 def follow_index(request):
-    posts = Post.objects.filter(author__following__user=request.user)
+    posts = (
+        Post.objects
+        .select_related('author', 'group')
+        .filter(author__following__user=request.user)
+        .prefetch_related('comments')
+    )
     page_obj = paginate_page(request, posts)
     context = {'page_obj': page_obj}
     return render(request, 'posts/follow.html', context)
@@ -134,3 +143,11 @@ def profile_unfollow(request, username):
     author = get_object_or_404(User, username=username)
     Follow.objects.filter(user=request.user, author=author).delete()
     return redirect('posts:follow_index')
+
+
+@login_required
+def comment_delete(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user == comment.author:
+        Comment.objects.filter(id=comment.id).delete()
+    return redirect('posts:post_detail', post_id=comment.post.id)

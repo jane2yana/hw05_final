@@ -1,13 +1,26 @@
+{% load static %}
+
 {% for comment in comments %}
 <div class="comment-post" style="margin-top: 2%;">
-  <div class="media">
-    <div class="media-body">
+  <div class="card" style="width: 70vh; margin-top: -8px;">
+    <div class="card-body" style="height: auto; min-height: 20px; margin-left: 0;">
       <h5>
         <a href="{% url 'posts:profile' comment.author.username %}">
           @{{ comment.author.username }}
         </a>
+        {% if comment.author == request.user %}
+        <div class="comment-del">
+          <a href="{% url 'posts:comment_del' comment.id %}">
+            <img src="{% static 'img/png/comment-del.ico' %}" width="15" height="15">
+          </a>
+        </div>
+        {% endif%}
       </h5>
-      <small style="margin-left: 2%; margin-top: -3px;">{{comment.created|date:"d E Y"}}</small>
+      <div class="comment-date">
+        <small style="margin-left: 2%; margin-top: -3px;">
+          {{comment.created|date:"d E Y"}}
+        </small>
+      </div>
       <p>
         {{ comment.text|linebreaksbr }}
       </p>
