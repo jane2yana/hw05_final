@@ -41,7 +41,10 @@ def profile(request, username):
     posts = author.posts.select_related('group').prefetch_related('comments')
     page_obj = paginate_page(request, posts)
     if request.user.is_authenticated:
-        following = author.following.exists()
+        following = Follow.objects.filter(
+            author_id=author.id,
+            user_id=request.user.id
+        ).exists()
     else:
         following = None
     context = {

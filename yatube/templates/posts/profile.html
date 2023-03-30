@@ -29,7 +29,9 @@
           Дата регистрации: <p>{{ author.date_joined| date:"d E Y"  }}</p>
         </li>
         <li style="margin-top: 20px;">
-        {% if following %}
+          {% if request.user.username == author.username %}
+          <p>Ваш профиль</p>
+          {% elif following == True %}
         <a class="btn btn-lg btn-secondary"
           href="{% url 'posts:profile_unfollow' author %}" role="button">
           Отписаться

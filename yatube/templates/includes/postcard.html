@@ -6,9 +6,15 @@
 <div class="card">
   {% if post.image %}
   <div class="card-header">
+    {% if view_name == 'posts:post_detail' %}
+    {% thumbnail post.image "900x450" padding=True as im %}
+    <img src="{{ im.url }}" width="{{ im.width }}" alt="rover" />
+    {% endthumbnail %}
+    {% else %}
     {% thumbnail post.image "900x339" crop="top" upscale=True as im %}
     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="rover" />
     {% endthumbnail %}
+    {% endif %}
   </div>
   {% endif %}
   <div class="card-body" style="margin: 2%;">
@@ -41,7 +47,7 @@
         <a href="{% url 'posts:profile' post.author %}">
           <h5>@{{ post.author }}</h5>
         </a>
-        <small>{{ post.pub_date| date:"d E Y" }}</small>
+        <small>{{ post.created| date:"d E Y" }}</small>
       </div>
     </div>
     <div class="comment">

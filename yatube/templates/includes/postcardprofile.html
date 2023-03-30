@@ -45,7 +45,7 @@
               <a href="{% url 'posts:profile' post.author %}">
                 <h5>@{{ post.author }}</h5>
               </a>
-              <small>{{ post.pub_date| date:"d E Y" }}</small>
+              <small>{{ post.created| date:"d E Y" }}</small>
             </div>
           </div>
           <div class="comment">

@@ -30,7 +30,7 @@ class Group(models.Model):
         return self.title
 
 
-class Post(models.Model):
+class Post(CreatedModel):
     title = models.CharField(
         max_length=50,
         blank=True,
@@ -42,10 +42,6 @@ class Post(models.Model):
         max_length=3000,
         verbose_name='Текст поста',
         help_text='Не больше 3000 знаков'
-    )
-    pub_date = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Дата публикации'
     )
     author = models.ForeignKey(
         User,
@@ -69,7 +65,7 @@ class Post(models.Model):
     )
 
     class Meta:
-        ordering = ('-pub_date',)
+        ordering = ('-created',)
         default_related_name = 'posts'
 
     def __str__(self):
